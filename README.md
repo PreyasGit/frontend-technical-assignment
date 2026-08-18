@@ -1,6 +1,6 @@
-# Infiniqe CRUD Dashboard
-
-Welcome to the Infiniqe CRUD Dashboard! This is a modern, responsive administrative interface built with the powerful Next.js 16 App Router.
+# infiniqeCRUDapp
+ 
+Welcome to the infiniqeCRUDapp! This is a modern, responsive administrative interface built with the powerful Next.js 16 App Router.
 
 ## Tech Stack
 - **Framework:** Next.js (App Router)
