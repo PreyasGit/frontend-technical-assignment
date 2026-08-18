@@ -29,8 +29,6 @@ Applied globally as design tokens in `src/app/globals.css`:
 | Secondary | Slate Gray | `#64748B` |
 | Accent | Emerald Green | `#10B981` |
 
-These three values are used **exactly as given, in both the light and the dark theme** — no tints, shades or derived variants. Everything else on screen is either neutral (white / near-black / gray for surfaces, text and borders) or the single destructive red reserved for delete actions and error messages.
-
 Only the neutrals invert between themes; the brand tokens never change.
 
 ---
