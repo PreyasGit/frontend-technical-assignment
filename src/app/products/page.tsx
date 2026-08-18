@@ -1,7 +1,9 @@
 "use client";
 
+import { useState, useCallback } from "react";
 import { useQuery } from "@tanstack/react-query";
 import axiosInstance from "@/lib/axios";
+import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import {
   Table,
   TableBody,
@@ -12,6 +14,7 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Input } from "@/components/ui/input";
 
 interface Product {
   id: number;
@@ -20,21 +23,85 @@ interface Product {
   price: number;
 }
 
+interface ProductsResponse {
+  products: Product[];
+  total: number;
+  skip: number;
+  limit: number;
+}
+
 export default function ProductsPage() {
-  const fetchProducts = async (): Promise<Product[]> => {
-    const { data } = await axiosInstance.get("/products");
-    return data.products;
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  const query = searchParams.get("query") || "";
+  const page = parseInt(searchParams.get("page") || "1", 10);
+  const sortBy = searchParams.get("sortBy") || "title";
+  const order = searchParams.get("order") || "asc";
+
+  const [searchInput, setSearchInput] = useState(query);
+
+  const limit = 10;
+  const skip = (page - 1) * limit;
+
+  const createQueryString = useCallback(
+    (name: string, value: string) => {
+      const params = new URLSearchParams(searchParams.toString());
+      if (value) {
+        params.set(name, value);
+      } else {
+        params.delete(name);
+      }
+      return params.toString();
+    },
+    [searchParams]
+  );
+
+  const fetchProducts = async (): Promise<ProductsResponse> => {
+    let url = "";
+    if (query) {
+      url = `/products/search?q=${query}&limit=${limit}&skip=${skip}&sortBy=${sortBy}&order=${order}`;
+    } else {
+      url = `/products?limit=${limit}&skip=${skip}&sortBy=${sortBy}&order=${order}`;
+    }
+    const { data } = await axiosInstance.get(url);
+    return data;
   };
 
   const {
-    data: products,
+    data,
     isLoading,
     isError,
     error,
   } = useQuery({
-    queryKey: ["products"],
+    queryKey: ["products", query, page, sortBy, order],
     queryFn: fetchProducts,
   });
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    const params = new URLSearchParams(searchParams.toString());
+    if (searchInput) {
+      params.set("query", searchInput);
+    } else {
+      params.delete("query");
+    }
+    params.set("page", "1"); // Reset to page 1 on new search
+    router.push(`${pathname}?${params.toString()}`);
+  };
+
+  const toggleSort = (field: string) => {
+    let newOrder = "asc";
+    if (sortBy === field && order === "asc") {
+      newOrder = "desc";
+    }
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("sortBy", field);
+    params.set("order", newOrder);
+    params.set("page", "1"); // Optional: Reset pagination on sort
+    router.push(`${pathname}?${params.toString()}`);
+  };
 
   if (isError) {
     return (
@@ -54,6 +121,10 @@ export default function ProductsPage() {
     );
   }
 
+  const products = data?.products || [];
+  const total = data?.total || 0;
+  const isNextDisabled = page * limit >= total;
+
   return (
     <div className="flex flex-col gap-6">
       <div className="flex items-center justify-between">
@@ -61,7 +132,39 @@ export default function ProductsPage() {
         <Button>Add Product</Button>
       </div>
 
-      <div className="rounded-md border bg-white">
+      {/* Controls UI */}
+      <div className="flex flex-col sm:flex-row gap-4 items-center justify-between bg-white p-4 rounded-md border">
+        <form onSubmit={handleSearch} className="flex items-center gap-2 w-full sm:w-auto">
+          <Input
+            type="text"
+            placeholder="Search products..."
+            value={searchInput}
+            onChange={(e) => setSearchInput(e.target.value)}
+            className="w-full sm:w-[300px]"
+          />
+          <Button type="submit" variant="secondary">Search</Button>
+        </form>
+
+        <div className="flex items-center gap-2 w-full sm:w-auto">
+          <span className="text-sm font-medium text-secondary">Sort by:</span>
+          <Button
+            variant={sortBy === "title" ? "default" : "outline"}
+            size="sm"
+            onClick={() => toggleSort("title")}
+          >
+            Title {sortBy === "title" && (order === "asc" ? "↑" : "↓")}
+          </Button>
+          <Button
+            variant={sortBy === "price" ? "default" : "outline"}
+            size="sm"
+            onClick={() => toggleSort("price")}
+          >
+            Price {sortBy === "price" && (order === "asc" ? "↑" : "↓")}
+          </Button>
+        </div>
+      </div>
+
+      <div className="rounded-md border bg-white overflow-x-auto">
         <Table>
           <TableHeader>
             <TableRow>
@@ -96,14 +199,14 @@ export default function ProductsPage() {
                   </TableCell>
                 </TableRow>
               ))
-            ) : products?.length === 0 ? (
+            ) : products.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={5} className="h-32 text-center text-secondary">
                   No products found.
                 </TableCell>
               </TableRow>
             ) : (
-              products?.map((product) => (
+              products.map((product) => (
                 <TableRow key={product.id}>
                   <TableCell className="font-medium">{product.id}</TableCell>
                   <TableCell>{product.title}</TableCell>
@@ -124,6 +227,31 @@ export default function ProductsPage() {
             )}
           </TableBody>
         </Table>
+      </div>
+
+      {/* Pagination UI */}
+      <div className="flex items-center justify-between">
+        <div className="text-sm text-secondary">
+          Showing {total === 0 ? 0 : skip + 1} to {Math.min(skip + limit, total)} of {total} products
+        </div>
+        <div className="flex items-center gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            disabled={page <= 1}
+            onClick={() => router.push(`${pathname}?${createQueryString("page", String(page - 1))}`)}
+          >
+            Previous
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            disabled={isNextDisabled}
+            onClick={() => router.push(`${pathname}?${createQueryString("page", String(page + 1))}`)}
+          >
+            Next
+          </Button>
+        </div>
       </div>
     </div>
   );
