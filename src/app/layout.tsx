@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { DM_Sans, Inter } from "next/font/google";
 import "./globals.css";
+import { QueryProvider } from "../providers/query-provider";
 import { cn } from "@/lib/utils";
 
 const inter = Inter({subsets:['latin'],variable:'--font-sans'});
@@ -21,7 +22,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       lang="en"
       className={cn("h-full", "antialiased", dmSans.variable, "font-sans", inter.variable)}
     >
-      <body className="min-h-full flex flex-col font-sans">{children}</body>
+      <body className="min-h-full flex flex-col font-sans">
+        <QueryProvider>{children}</QueryProvider>
+      </body>
     </html>
   );
 }
