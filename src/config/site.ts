@@ -9,11 +9,11 @@ export interface NavItem {
 }
 
 export const siteConfig = {
-  name: "Infiniqe Console",
-  shortName: "Infiniqe",
+  name: "InfiniqeCRUD",
+  shortName: "InfiniqeCRUD",
   description:
     "A Next.js App Router CRUD console for managing products, users and recipes with server-side search, sorting and pagination.",
-  url: "https://infiniqe-console.local",
+  url: "https://infiniqe-crud.local",
 } as const;
 
 export const navItems: NavItem[] = [

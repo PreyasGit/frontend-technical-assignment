@@ -1,4 +1,4 @@
-# Infiniqe Console — Frontend Technical Round
+# InfiniqeCRUD — Frontend Technical Round
 
 A small CRUD application built with the **Next.js App Router**, covering three modules — **Products**, **Users** and **Recipes** — backed by the public [DummyJSON](https://dummyjson.com) API.
 

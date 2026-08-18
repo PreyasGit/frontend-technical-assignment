@@ -25,7 +25,7 @@ export function Logo({ className, markOnly = false }: LogoProps) {
       </svg>
       {markOnly ? null : (
         <span className="text-lg font-bold tracking-tight text-foreground">
-          Infiniqe<span className="text-primary">Console</span>
+          Infiniqe<span className="text-primary">CRUD</span>
         </span>
       )}
     </span>
