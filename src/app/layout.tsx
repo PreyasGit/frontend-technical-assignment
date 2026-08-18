@@ -1,38 +1,73 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { DM_Sans } from "next/font/google";
-import "./globals.css";
-import { QueryProvider } from "../providers/query-provider";
-import { ThemeProvider } from "@/providers/theme-provider";
-import { cn } from "@/lib/utils";
-import { Navbar } from "@/components/layout/Navbar";
 import { Toaster } from "sonner";
 
+import "./globals.css";
+import { Footer } from "@/components/layout/footer";
+import { Navbar } from "@/components/layout/navbar";
+import { siteConfig } from "@/config/site";
+import { cn } from "@/lib/utils";
+import { QueryProvider } from "@/providers/query-provider";
+import { ThemeProvider } from "@/providers/theme-provider";
+
+/** DM Sans is the default application font, exposed as `--font-dm-sans`. */
 const dmSans = DM_Sans({
   variable: "--font-dm-sans",
   subsets: ["latin"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "infiniqeCRUDapp | Preyas Mistry",
-  description: "A modern Next.js CRUD application managing products, users, and recipes with a responsive UI and server-side state.",
+  title: {
+    default: `${siteConfig.name} — Products, Users & Recipes`,
+    template: `%s | ${siteConfig.name}`,
+  },
+  description: siteConfig.description,
+  applicationName: siteConfig.name,
+  keywords: ["Next.js", "App Router", "CRUD", "React Query", "Tailwind CSS"],
+  icons: {
+    icon: "/icon.svg",
+    shortcut: "/icon.svg",
+    apple: "/icon.svg",
+  },
+  openGraph: {
+    type: "website",
+    title: `${siteConfig.name} — Products, Users & Recipes`,
+    description: siteConfig.description,
+    siteName: siteConfig.name,
+  },
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#2563EB" },
+    { media: "(prefers-color-scheme: dark)", color: "#0B1220" },
+  ],
+};
+
+export default function RootLayout({
+  children,
+}: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html
-      lang="en"
-      suppressHydrationWarning
-      className={cn("h-full", "antialiased", dmSans.variable, "font-sans")}
-    >
-      <body className="min-h-full flex flex-col font-sans bg-background">
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+    <html lang="en" suppressHydrationWarning className={cn("h-full", dmSans.variable)}>
+      <body className="flex min-h-full flex-col bg-background font-sans text-foreground">
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
           <QueryProvider>
             <Navbar />
-            <main className="container mx-auto p-4 md:p-6">
+            <main
+              id="main-content"
+              className="mx-auto w-full max-w-7xl flex-1 px-4 py-6 sm:px-6 lg:py-10"
+            >
               {children}
             </main>
+            <Footer />
           </QueryProvider>
-          <Toaster richColors position="top-right" />
+          <Toaster richColors closeButton position="top-right" />
         </ThemeProvider>
       </body>
     </html>

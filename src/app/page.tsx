@@ -1,83 +1,90 @@
 import Link from "next/link";
-import { Package, Users, Utensils } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { buttonVariants } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+import { ArrowRight } from "lucide-react";
 
-export default function Home() {
+import { PageHeader } from "@/components/common/page-header";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { navItems, siteConfig } from "@/config/site";
+
+const moduleItems = navItems.filter((item) => item.href !== "/");
+
+const highlights = [
+  {
+    label: "Products",
+    detail: "Server-side search, sorting, pagination and full CRUD across pages.",
+  },
+  {
+    label: "Users",
+    detail: "Single-page CRUD with a modal form and a details drawer.",
+  },
+  {
+    label: "Recipes",
+    detail: "Responsive card grid plus a server-rendered details page.",
+  },
+];
+
+export default function DashboardPage() {
   return (
-    <div className="flex flex-col gap-8 max-w-6xl mx-auto py-10 w-full px-4">
-      <div className="flex flex-col gap-3">
-        <h1 className="text-4xl font-bold tracking-tight text-foreground">Welcome to infiniqeCRUDapp Dashboard</h1>
-        <p className="text-lg text-secondary max-w-2xl">
-          Manage your application's data, users, and content from one centralized location.
-        </p>
-      </div>
+    <div className="flex flex-col gap-10">
+      <PageHeader
+        title={`Welcome to ${siteConfig.name}`}
+        description={siteConfig.description}
+      />
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {/* Products Card */}
-        <Card className="flex flex-col h-full hover:shadow-md transition-shadow">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-3">
-              <Package className="h-7 w-7 text-primary" />
-              Manage Products
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="flex flex-col flex-1 gap-6">
-            <p className="text-secondary flex-1 leading-relaxed">
-              View, search, edit, and manage the entire product catalog and inventory list.
-            </p>
-            <Link 
-              href="/products" 
-              className={cn(buttonVariants({ variant: "default" }), "w-full font-semibold")}
-            >
-              Go to Products
-            </Link>
-          </CardContent>
-        </Card>
+      <section aria-labelledby="modules-heading" className="flex flex-col gap-4">
+        <h2 id="modules-heading" className="text-lg font-semibold text-foreground">
+          Modules
+        </h2>
 
-        {/* Users Card */}
-        <Card className="flex flex-col h-full hover:shadow-md transition-shadow">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-3">
-              <Users className="h-7 w-7 text-primary" />
-              View Users
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="flex flex-col flex-1 gap-6">
-            <p className="text-secondary flex-1 leading-relaxed">
-              Browse and search through all registered application users and customer data.
-            </p>
-            <Link 
-              href="/users" 
-              className={cn(buttonVariants({ variant: "default" }), "w-full font-semibold")}
-            >
-              Go to Users
-            </Link>
-          </CardContent>
-        </Card>
+        <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
+          {moduleItems.map((item) => (
+            <Card key={item.href} className="flex h-full flex-col">
+              <CardHeader>
+                <span className="flex size-11 items-center justify-center rounded-lg bg-primary/10">
+                  <item.icon className="size-5 text-primary" />
+                </span>
+                <CardTitle>{item.label}</CardTitle>
+                <CardDescription>{item.description}</CardDescription>
+              </CardHeader>
+              <CardContent className="mt-auto">
+                <Button
+                  variant="outline"
+                  className="w-full"
+                  render={<Link href={item.href} />}
+                >
+                  Open {item.label}
+                  <ArrowRight />
+                </Button>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      </section>
 
-        {/* Recipes Card */}
-        <Card className="flex flex-col h-full hover:shadow-md transition-shadow">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-3">
-              <Utensils className="h-7 w-7 text-primary" />
-              Browse Recipes
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="flex flex-col flex-1 gap-6">
-            <p className="text-secondary flex-1 leading-relaxed">
-              Explore the culinary collection, complete with difficulty levels and prep times.
-            </p>
-            <Link 
-              href="/recipes" 
-              className={cn(buttonVariants({ variant: "default" }), "w-full font-semibold")}
-            >
-              Go to Recipes
-            </Link>
-          </CardContent>
-        </Card>
-      </div>
+      <section
+        aria-labelledby="highlights-heading"
+        className="rounded-lg border border-border bg-card p-6 shadow-sm"
+      >
+        <h2 id="highlights-heading" className="text-lg font-semibold text-foreground">
+          What is included
+        </h2>
+        <dl className="mt-4 grid grid-cols-1 gap-5 sm:grid-cols-3">
+          {highlights.map((highlight) => (
+            <div key={highlight.label} className="space-y-1">
+              <dt className="text-sm font-semibold text-primary">
+                {highlight.label}
+              </dt>
+              <dd className="text-sm text-muted-foreground">{highlight.detail}</dd>
+            </div>
+          ))}
+        </dl>
+      </section>
     </div>
   );
 }
