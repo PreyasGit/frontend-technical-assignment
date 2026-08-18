@@ -41,7 +41,7 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   themeColor: [
     { media: "(prefers-color-scheme: light)", color: "#2563EB" },
-    { media: "(prefers-color-scheme: dark)", color: "#0B1220" },
+    { media: "(prefers-color-scheme: dark)", color: "#0F172A" },
   ],
 };
 
@@ -49,7 +49,13 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" suppressHydrationWarning className={cn("h-full", dmSans.variable)}>
+    <html
+      lang="en"
+      suppressHydrationWarning
+      // Lets Next.js suspend smooth scrolling during route transitions.
+      data-scroll-behavior="smooth"
+      className={cn("h-full", dmSans.variable)}
+    >
       <body className="flex min-h-full flex-col bg-background font-sans text-foreground">
         <ThemeProvider
           attribute="class"

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Compass, Home } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
+import { ButtonLink } from "@/components/ui/button";
 import { navItems } from "@/config/site";
 
 export const metadata: Metadata = {
@@ -31,10 +31,10 @@ export default function NotFound() {
         </p>
       </div>
 
-      <Button render={<Link href="/" />}>
+      <ButtonLink href="/">
         <Home />
         Back to dashboard
-      </Button>
+      </ButtonLink>
 
       <nav aria-label="Suggested pages" className="flex flex-wrap justify-center gap-2">
         {navItems

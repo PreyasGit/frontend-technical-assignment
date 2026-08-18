@@ -14,7 +14,7 @@ import { Pagination } from "@/components/common/pagination";
 import { SearchInput } from "@/components/common/search-input";
 import { SourceBadge } from "@/components/common/source-badge";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { Button, ButtonLink } from "@/components/ui/button";
 import { Select } from "@/components/ui/select";
 import { useListParams, withReturnState } from "@/hooks/use-list-params";
 import { cn, formatCurrency, toTitleCase } from "@/lib/utils";
@@ -138,22 +138,22 @@ export function ProductListView() {
       className: "text-right",
       cell: (product) => (
         <div className="flex items-center justify-end gap-1">
-          <Button
+          <ButtonLink
             size="icon-sm"
             variant="ghost"
             aria-label={`View ${product.title}`}
-            render={<Link href={detailHref(product.id)} />}
+            href={detailHref(product.id)}
           >
             <Eye />
-          </Button>
-          <Button
+          </ButtonLink>
+          <ButtonLink
             size="icon-sm"
             variant="ghost"
             aria-label={`Edit ${product.title}`}
-            render={<Link href={editHref(product.id)} />}
+            href={editHref(product.id)}
           >
             <Pencil />
-          </Button>
+          </ButtonLink>
           <Button
             size="icon-sm"
             variant="destructive"
@@ -173,14 +173,10 @@ export function ProductListView() {
         title="Products"
         description="Server-side search, sorting and pagination backed by the DummyJSON Products API."
         actions={
-          <Button
-            render={
-              <Link href={withReturnState("/products/new", listParams.queryString)} />
-            }
-          >
+          <ButtonLink href={withReturnState("/products/new", listParams.queryString)}>
             <Plus />
             Add Product
-          </Button>
+          </ButtonLink>
         }
       />
 

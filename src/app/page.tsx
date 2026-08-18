@@ -1,8 +1,7 @@
-import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 
 import { PageHeader } from "@/components/common/page-header";
-import { Button } from "@/components/ui/button";
+import { ButtonLink } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -53,14 +52,10 @@ export default function DashboardPage() {
                 <CardDescription>{item.description}</CardDescription>
               </CardHeader>
               <CardContent className="mt-auto">
-                <Button
-                  variant="outline"
-                  className="w-full"
-                  render={<Link href={item.href} />}
-                >
+                <ButtonLink variant="outline" className="w-full" href={item.href}>
                   Open {item.label}
                   <ArrowRight />
-                </Button>
+                </ButtonLink>
               </CardContent>
             </Card>
           ))}

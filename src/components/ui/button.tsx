@@ -1,3 +1,4 @@
+import Link from "next/link"
 import { Button as ButtonPrimitive } from "@base-ui/react/button"
 import { cva, type VariantProps } from "class-variance-authority"
 
@@ -55,4 +56,27 @@ function Button({
   )
 }
 
-export { Button, buttonVariants }
+/**
+ * A link styled as a button.
+ *
+ * Deliberately not `<Button render={<Link />} />`: Base UI's button applies
+ * `role="button"` to non-native elements, which would override the anchor's
+ * link role and lose the affordances that come with it. Sharing only the
+ * variants keeps the styling identical while the element stays a real `<a>`.
+ */
+function ButtonLink({
+  className,
+  variant = "default",
+  size = "default",
+  ...props
+}: React.ComponentProps<typeof Link> & VariantProps<typeof buttonVariants>) {
+  return (
+    <Link
+      data-slot="button-link"
+      className={cn(buttonVariants({ variant, size, className }))}
+      {...props}
+    />
+  )
+}
+
+export { Button, ButtonLink, buttonVariants }

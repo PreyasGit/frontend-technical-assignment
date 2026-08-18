@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { Pencil, Star } from "lucide-react";
 
@@ -10,7 +9,7 @@ import { ErrorState } from "@/components/common/error-state";
 import { PageHeader } from "@/components/common/page-header";
 import { SourceBadge } from "@/components/common/source-badge";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { ButtonLink } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
@@ -64,10 +63,10 @@ export function ProductDetailView({ productId }: ProductDetailViewProps) {
         backHref={backHref}
         backLabel="Back to products"
         actions={
-          <Button render={<Link href={editHref} />}>
+          <ButtonLink href={editHref}>
             <Pencil />
             Edit product
-          </Button>
+          </ButtonLink>
         }
       />
 
