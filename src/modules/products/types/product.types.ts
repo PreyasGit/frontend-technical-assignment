@@ -1,4 +1,4 @@
-import type { ListQueryParams } from "@/types/api.types";
+import type { ListQueryParams, RecordSource } from "@/types/api.types";
 
 export interface ProductDimensions {
   width: number;
@@ -15,6 +15,9 @@ export interface ProductReview {
 }
 
 export interface Product {
+  /** Set by the API: whether this record was created or edited locally. */
+  source?: RecordSource;
+
   id: number;
   title: string;
   description: string;

@@ -8,6 +8,7 @@ import { Pencil, Star } from "lucide-react";
 
 import { ErrorState } from "@/components/common/error-state";
 import { PageHeader } from "@/components/common/page-header";
+import { SourceBadge } from "@/components/common/source-badge";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -89,6 +90,7 @@ export function ProductDetailView({ productId }: ProductDetailViewProps) {
                   </Badge>
                 ) : null}
                 <Badge variant="secondary">{toTitleCase(product.category)}</Badge>
+                <SourceBadge source={product.source} />
                 <RatingBadge rating={product.rating} />
               </div>
 
@@ -206,7 +208,7 @@ function ProductGallery({ product }: { product: Product }) {
 function RatingBadge({ rating }: { rating: number }) {
   return (
     <span className="inline-flex items-center gap-1 text-sm font-medium text-foreground">
-      <Star className="size-4 fill-amber-400 text-amber-400" />
+      <Star className="size-4 fill-accent text-accent" />
       {rating.toFixed(2)}
     </span>
   );

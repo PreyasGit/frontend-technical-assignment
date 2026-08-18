@@ -12,6 +12,7 @@ import { ErrorState } from "@/components/common/error-state";
 import { PageHeader } from "@/components/common/page-header";
 import { Pagination } from "@/components/common/pagination";
 import { SearchInput } from "@/components/common/search-input";
+import { SourceBadge } from "@/components/common/source-badge";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Select } from "@/components/ui/select";
@@ -80,12 +81,15 @@ export function ProductListView() {
       header: "Title",
       sortable: true,
       cell: (product) => (
-        <Link
-          href={detailHref(product.id)}
-          className="font-medium text-foreground transition-colors hover:text-primary"
-        >
-          {product.title}
-        </Link>
+        <div className="flex items-center gap-2">
+          <Link
+            href={detailHref(product.id)}
+            className="font-medium text-foreground transition-colors hover:text-primary"
+          >
+            {product.title}
+          </Link>
+          <SourceBadge source={product.source} />
+        </div>
       ),
     },
     {
@@ -185,10 +189,8 @@ export function ProductListView() {
           value={listParams.search}
           placeholder="Search products by title, brand or description…"
           label="Search products"
-          onChange={(value) =>
-            // Search and category filtering map to two different API endpoints.
-            listParams.setParams({ search: value, category: undefined })
-          }
+          // Search and the category filter now combine: the API applies both.
+          onChange={(value) => listParams.setParams({ search: value })}
           className="sm:max-w-sm"
         />
 
@@ -200,10 +202,7 @@ export function ProductListView() {
             aria-label="Filter by category"
             value={category}
             onChange={(event) =>
-              listParams.setParams({
-                category: event.target.value || undefined,
-                search: undefined,
-              })
+              listParams.setParams({ category: event.target.value || undefined })
             }
             className="sm:w-52"
           >

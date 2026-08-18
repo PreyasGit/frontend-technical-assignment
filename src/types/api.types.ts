@@ -1,13 +1,8 @@
-/** Pagination metadata returned by every DummyJSON collection endpoint. */
-export interface PaginationMeta {
-  total: number;
-  skip: number;
-  limit: number;
-}
-
-export type ProductsEnvelope<T> = PaginationMeta & { products: T[] };
-export type UsersEnvelope<T> = PaginationMeta & { users: T[] };
-export type RecipesEnvelope<T> = PaginationMeta & { recipes: T[] };
+/**
+ * Where a record came from. The API attaches this to every entity so the UI can
+ * show which rows have been created or changed locally.
+ */
+export type RecordSource = "upstream" | "created" | "updated";
 
 /** Sort direction shared by every listing screen. */
 export type SortOrder = "asc" | "desc";

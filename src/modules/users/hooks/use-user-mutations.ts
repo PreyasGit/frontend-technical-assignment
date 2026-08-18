@@ -29,7 +29,7 @@ export function useUpdateUser(onSuccess?: () => void) {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ id, payload }: { id: number; payload: Partial<UserPayload> }) =>
+    mutationFn: ({ id, payload }: { id: number; payload: UserPayload }) =>
       updateUser(id, payload),
     onSuccess: (user) => {
       toast.success(`${user.firstName} ${user.lastName} was updated successfully.`);

@@ -11,6 +11,7 @@ import { ErrorState } from "@/components/common/error-state";
 import { PageHeader } from "@/components/common/page-header";
 import { Pagination } from "@/components/common/pagination";
 import { SearchInput } from "@/components/common/search-input";
+import { SourceBadge } from "@/components/common/source-badge";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Select } from "@/components/ui/select";
@@ -94,8 +95,9 @@ export function UserListView() {
             <Image src={user.image} alt="" fill sizes="36px" className="object-cover" />
           </div>
           <div className="min-w-0">
-            <p className="truncate font-medium text-foreground">
+            <p className="flex items-center gap-2 truncate font-medium text-foreground">
               {user.firstName} {user.lastName}
+              <SourceBadge source={user.source} />
             </p>
             <p className="truncate text-xs text-muted-foreground">@{user.username}</p>
           </div>
@@ -191,9 +193,7 @@ export function UserListView() {
           value={listParams.search}
           placeholder="Search users by name, email or username…"
           label="Search users"
-          onChange={(value) =>
-            listParams.setParams({ search: value, gender: undefined })
-          }
+          onChange={(value) => listParams.setParams({ search: value })}
           className="sm:max-w-sm"
         />
 
@@ -205,10 +205,7 @@ export function UserListView() {
             aria-label="Filter by gender"
             value={gender}
             onChange={(event) =>
-              listParams.setParams({
-                gender: event.target.value || undefined,
-                search: undefined,
-              })
+              listParams.setParams({ gender: event.target.value || undefined })
             }
             className="sm:w-40"
           >

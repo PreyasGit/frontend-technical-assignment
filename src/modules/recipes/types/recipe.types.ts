@@ -1,6 +1,9 @@
-import type { ListQueryParams } from "@/types/api.types";
+import type { ListQueryParams, RecordSource } from "@/types/api.types";
 
 export interface Recipe {
+  /** Set by the API: whether this record was created or edited locally. */
+  source?: RecordSource;
+
   id: number;
   name: string;
   ingredients: string[];

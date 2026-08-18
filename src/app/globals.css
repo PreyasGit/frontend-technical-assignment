@@ -5,26 +5,22 @@
 @custom-variant dark (&:is(.dark *));
 
 /*
- * Brand palette (fixed by the brand guidelines):
+ * Brand palette — these three values are fixed by the brand guidelines and are
+ * the ONLY colours used for primary, secondary and accent. They are identical
+ * in the light and the dark theme; no tints or shades are derived from them.
+ *
  *   Primary   Royal Blue    #2563EB
  *   Secondary Slate Gray    #64748B
  *   Accent    Emerald Green #10B981
  *
- * The dark theme keeps the same hues and only lightens them, so the brand stays
- * recognisable while text and controls remain legible on a dark surface.
+ * Everything else is either neutral (white / black / gray for surfaces, text
+ * and borders) or the single destructive red reserved for delete actions and
+ * error messages.
  */
 :root {
   --brand-primary: #2563eb;
   --brand-secondary: #64748b;
   --brand-accent: #10b981;
-
-  --background: #ffffff;
-  --foreground: #0f172a;
-
-  --card: #ffffff;
-  --card-foreground: var(--foreground);
-  --popover: #ffffff;
-  --popover-foreground: var(--foreground);
 
   --primary: var(--brand-primary);
   --primary-foreground: #ffffff;
@@ -33,16 +29,23 @@
   --accent: var(--brand-accent);
   --accent-foreground: #ffffff;
 
+  /* Neutrals */
+  --background: #ffffff;
+  --foreground: #0f172a;
+  --card: #ffffff;
+  --card-foreground: var(--foreground);
+  --popover: #ffffff;
+  --popover-foreground: var(--foreground);
   --muted: #f1f5f9;
-  --muted-foreground: #64748b;
+  --muted-foreground: var(--brand-secondary);
+  --border: #e2e8f0;
+  --input: #cbd5e1;
 
+  /* Destructive is a status colour, not a brand colour. */
   --destructive: #dc2626;
   --destructive-foreground: #ffffff;
 
-  --border: #e2e8f0;
-  --input: #cbd5e1;
   --ring: var(--brand-primary);
-
   --radius: 0.625rem;
 
   --sidebar: #f8fafc;
@@ -56,42 +59,38 @@
 }
 
 .dark {
-  --brand-primary: #3b82f6;
-  --brand-secondary: #94a3b8;
-  --brand-accent: #34d399;
-
-  --background: #0b1220;
-  --foreground: #e2e8f0;
-
-  --card: #111a2c;
-  --card-foreground: var(--foreground);
-  --popover: #111a2c;
-  --popover-foreground: var(--foreground);
-
+  /* The brand colours are unchanged in dark mode. */
   --primary: var(--brand-primary);
-  --primary-foreground: #0b1220;
+  --primary-foreground: #ffffff;
   --secondary: var(--brand-secondary);
-  --secondary-foreground: #0b1220;
+  --secondary-foreground: #ffffff;
   --accent: var(--brand-accent);
-  --accent-foreground: #0b1220;
+  --accent-foreground: #ffffff;
 
-  --muted: #1c2740;
+  /* Only the neutrals invert. */
+  --background: #0f172a;
+  --foreground: #f8fafc;
+  --card: #1e293b;
+  --card-foreground: var(--foreground);
+  --popover: #1e293b;
+  --popover-foreground: var(--foreground);
+  --muted: #1e293b;
   --muted-foreground: #94a3b8;
+  --border: #334155;
+  --input: #475569;
 
-  --destructive: #f87171;
-  --destructive-foreground: #0b1220;
+  --destructive: #dc2626;
+  --destructive-foreground: #ffffff;
 
-  --border: #22304d;
-  --input: #2b3a5c;
   --ring: var(--brand-primary);
 
-  --sidebar: #111a2c;
+  --sidebar: #1e293b;
   --sidebar-foreground: var(--foreground);
   --sidebar-primary: var(--brand-primary);
-  --sidebar-primary-foreground: #0b1220;
-  --sidebar-accent: #1c2740;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #334155;
   --sidebar-accent-foreground: var(--foreground);
-  --sidebar-border: #22304d;
+  --sidebar-border: #334155;
   --sidebar-ring: var(--brand-primary);
 }
 
@@ -153,7 +152,6 @@
     @apply bg-background text-foreground antialiased;
   }
 
-  /* Keep long words from breaking the layout on narrow screens. */
   h1,
   h2,
   h3 {

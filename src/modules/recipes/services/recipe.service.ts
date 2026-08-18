@@ -1,43 +1,29 @@
 import { apiClient } from "@/lib/api-client";
 import { buildQueryString } from "@/lib/utils";
-import type { ListResult, RecipesEnvelope } from "@/types/api.types";
+import type { ListResult } from "@/types/api.types";
 
 import type { Recipe, RecipeListParams } from "../types/recipe.types";
 
 const RESOURCE = "/recipes";
 
-/**
- * Fetches one page of recipes.
- *
- * Safe to call from both server and client components — it only depends on the
- * shared Axios instance.
- */
+/** Fetches one page of recipes with server-side search and pagination. */
 export async function getRecipes(
   params: RecipeListParams
 ): Promise<ListResult<Recipe>> {
-  const { page, limit, search, tag, sortBy, order } = params;
-  const skip = (page - 1) * limit;
+  const query = buildQueryString({
+    page: params.page,
+    limit: params.limit,
+    search: params.search,
+    sortBy: params.sortBy,
+    order: params.order,
+    tag: params.tag,
+  });
 
-  let path: string;
-  if (search) {
-    path = `${RESOURCE}/search?${buildQueryString({ q: search, limit, skip, sortBy, order })}`;
-  } else if (tag) {
-    path = `${RESOURCE}/tag/${encodeURIComponent(tag)}?${buildQueryString({ limit, skip, sortBy, order })}`;
-  } else {
-    path = `${RESOURCE}?${buildQueryString({ limit, skip, sortBy, order })}`;
-  }
-
-  const { data } = await apiClient.get<RecipesEnvelope<Recipe>>(path);
-
-  return {
-    items: data.recipes ?? [],
-    total: data.total ?? 0,
-    skip: data.skip ?? skip,
-    limit: data.limit ?? limit,
-  };
+  const { data } = await apiClient.get<ListResult<Recipe>>(`${RESOURCE}?${query}`);
+  return data;
 }
 
-/** Fetches a single recipe. Used by the server-rendered details page. */
+/** Fetches a single recipe. */
 export async function getRecipeById(id: string | number): Promise<Recipe> {
   const { data } = await apiClient.get<Recipe>(`${RESOURCE}/${id}`);
   return data;

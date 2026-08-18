@@ -11,10 +11,10 @@ import {
   deleteProduct,
   updateProduct,
 } from "../services/product.service";
-import type { ProductPayload } from "../types/product.types";
+import type { Product, ProductPayload } from "../types/product.types";
 
 /** Creates a product and refreshes every cached product list. */
-export function useCreateProduct(onSuccess?: () => void) {
+export function useCreateProduct(onSuccess?: (product: Product) => void) {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -22,7 +22,7 @@ export function useCreateProduct(onSuccess?: () => void) {
     onSuccess: (product) => {
       toast.success(`"${product.title}" was created successfully.`);
       queryClient.invalidateQueries({ queryKey: queryKeys.products.all });
-      onSuccess?.();
+      onSuccess?.(product);
     },
     onError: (error) => toast.error(getErrorMessage(error)),
   });
@@ -33,7 +33,7 @@ export function useUpdateProduct(id: string | number, onSuccess?: () => void) {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (payload: Partial<ProductPayload>) => updateProduct(id, payload),
+    mutationFn: (payload: ProductPayload) => updateProduct(id, payload),
     onSuccess: (product) => {
       toast.success(`"${product.title}" was updated successfully.`);
       queryClient.invalidateQueries({ queryKey: queryKeys.products.all });

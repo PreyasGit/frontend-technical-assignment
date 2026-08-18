@@ -3,7 +3,11 @@
 import { useRouter, useSearchParams } from "next/navigation";
 
 import { PageHeader } from "@/components/common/page-header";
-import { RETURN_PARAM_KEY, resolveReturnHref } from "@/hooks/use-list-params";
+import {
+  RETURN_PARAM_KEY,
+  resolveReturnHref,
+  withReturnState,
+} from "@/hooks/use-list-params";
 
 import { useCreateProduct } from "../hooks/use-product-mutations";
 import type { ProductFormValues } from "../schemas/product.schema";
@@ -14,10 +18,21 @@ export function ProductCreateView() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  // Returns to the listing exactly as it was left, if we arrived from there.
-  const backHref = resolveReturnHref("/products", searchParams.get(RETURN_PARAM_KEY));
+  const returnState = searchParams.get(RETURN_PARAM_KEY);
 
-  const createMutation = useCreateProduct(() => router.push(backHref));
+  // Returns to the listing exactly as it was left, if we arrived from there.
+  const backHref = resolveReturnHref("/products", returnState);
+
+  // Landing on the new product's details page makes the saved record
+  // immediately visible instead of hiding it somewhere in a sorted page.
+  const createMutation = useCreateProduct((product) =>
+    router.push(
+      withReturnState(
+        `/products/${product.id}`,
+        returnState ? decodeURIComponent(returnState) : ""
+      )
+    )
+  );
 
   const handleSubmit = (values: ProductFormValues) => {
     createMutation.mutate({

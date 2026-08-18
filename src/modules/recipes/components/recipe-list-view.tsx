@@ -45,7 +45,7 @@ export function RecipeListView() {
           value={listParams.search}
           placeholder="Search recipes by name, cuisine or ingredient…"
           label="Search recipes"
-          onChange={(value) => listParams.setParams({ search: value, tag: undefined })}
+          onChange={(value) => listParams.setParams({ search: value })}
           className="sm:max-w-sm"
         />
 
@@ -57,10 +57,7 @@ export function RecipeListView() {
             aria-label="Filter by tag"
             value={tag}
             onChange={(event) =>
-              listParams.setParams({
-                tag: event.target.value || undefined,
-                search: undefined,
-              })
+              listParams.setParams({ tag: event.target.value || undefined })
             }
             className="sm:w-52"
           >

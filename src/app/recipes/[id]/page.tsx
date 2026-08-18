@@ -3,8 +3,8 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 import { RecipeDetail } from "@/modules/recipes/components/recipe-detail";
-import { getRecipeById } from "@/modules/recipes/services/recipe.service";
 import type { Recipe } from "@/modules/recipes/types/recipe.types";
+import { getRecipe } from "@/server/recipes/recipe.repository";
 
 interface RecipeDetailsPageProps {
   params: Promise<{ id: string }>;
@@ -13,10 +13,13 @@ interface RecipeDetailsPageProps {
 /**
  * Server-side fetch, deduplicated across `generateMetadata` and the page render
  * so a single request serves both.
+ *
+ * This calls the server repository directly rather than going back out through
+ * the application's own HTTP API — same data, one less network hop.
  */
 const loadRecipe = cache(async (id: string): Promise<Recipe | null> => {
   try {
-    return await getRecipeById(id);
+    return await getRecipe(id);
   } catch {
     return null;
   }

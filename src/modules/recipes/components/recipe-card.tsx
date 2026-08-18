@@ -9,10 +9,11 @@ import { cn, formatMinutes } from "@/lib/utils";
 
 import type { Recipe, RecipeDifficulty } from "../types/recipe.types";
 
+/** Difficulty chips use the brand palette only: accent, primary, secondary. */
 const difficultyStyles: Record<RecipeDifficulty, string> = {
-  Easy: "bg-accent/10 text-accent",
-  Medium: "bg-amber-500/10 text-amber-600 dark:text-amber-400",
-  Hard: "bg-destructive/10 text-destructive",
+  Easy: "bg-accent text-accent-foreground",
+  Medium: "bg-primary text-primary-foreground",
+  Hard: "bg-secondary text-secondary-foreground",
 };
 
 export interface RecipeCardProps {
@@ -71,7 +72,7 @@ export function RecipeCard({ recipe }: RecipeCardProps) {
             {recipe.caloriesPerServing} kcal
           </span>
           <span className="inline-flex items-center gap-1 font-medium text-foreground">
-            <Star className="size-3.5 fill-amber-400 text-amber-400" />
+            <Star className="size-3.5 fill-accent text-accent" />
             {recipe.rating.toFixed(1)}
           </span>
         </div>

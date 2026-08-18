@@ -1,4 +1,4 @@
-import type { ListQueryParams } from "@/types/api.types";
+import type { ListQueryParams, RecordSource } from "@/types/api.types";
 
 export interface UserAddress {
   address: string;
@@ -17,6 +17,9 @@ export interface UserCompany {
 }
 
 export interface User {
+  /** Set by the API: whether this record was created or edited locally. */
+  source?: RecordSource;
+
   id: number;
   firstName: string;
   lastName: string;
